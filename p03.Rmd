@@ -1,5 +1,45 @@
 ---
-title: "Portfolio 3"
+name: "Marcus Minko"
+date: "3-15-2022"
+title: "portfolio piece 3 EDA_diabetes"
+output: html_document
 ---
 
-> The projects should be numbered consecutively (i.e., in the order in which you began them), and should include for each project a description of the goal, the product (computer program, hand graph, computer graph, etc.), the data, and some interpretation. Reports must be reproducible and of high quality in terms of writing, grammar, presentation, etc.
+#The goal is to explore health data and examine the influence of smoking and diabetes on heart attacks and heart disease
+#data: diabetes and health indicators
+
+```{r get data}
+library(readr)
+diabetes_012_health_indicators_BRFSS2015 <-    read_csv("~/Downloads/archive/diabetes_012_health_indicators_BRFSS2015.csv")
+#change name of dataset
+db <- diabetes_012_health_indicators_BRFSS2015
+library(tidyverse)
+#summarize data
+glimpse(db)
+#plot the distribution of BMI scores
+db %>% 
+       ggplot(aes(x = BMI)) + geom_histogram(fill = "steel blue") +theme_linedraw() + labs(title = "Distribution of BMI scores", y = "frequency", x = "BMI Scores")
+#facet by sex
+db %>% 
+ggplot(aes(x = BMI)) + geom_histogram(fill = "steel blue") + theme_linedraw()+ facet_wrap(~Sex) + labs(title = "Distribution of BMI scores", subtitle = "0 = Men  1 = Women", y = "frequency", x = "BMI Scores")
+#filter out the prediabetics, mutate, select
+db_new <- db %>% 
+                filter(Diabetes_012 != 1) %>% 
+                mutate(Diabetes = recode(Diabetes_012, "0" = "Normal", "2" = "Diabetic")) 
+#Recode Smoking status and Heart Attack/Disease from numeric to descriptive characters
+db_new1 <- db_new %>% 
+         mutate(Smoking = recode(Smoker, "0" = "Non-Smoker", "1" = "Smoker")) 
+              
+                
+db_new2 <- db_new1 %>%
+      mutate(Heart_Attack_Disease = recode(HeartDiseaseorAttack, "0" = "NO", "1" = "YES"))              
+                  
+#plot
+db_new2 %>% 
+           ggplot(aes(x = Heart_Attack_Disease)) + geom_bar (fill = "steel blue") + facet_grid(Diabetes ~ Smoking, scales = "free") + theme_minimal() + labs(title = "Heart Problems by Diabetes & Smoking Status", y = "Frequency", x = "Heart Attack / Heart Disease")
+#You can see in this plot that smoking if you're diabetic puts you at the greatest risk of a heart attack or diagnosis of heart disease
+db_new2 %>% 
+          group_by(Diabetes, Smoking, Heart_Attack_Disease) %>% 
+          summarise(percent = 100 * n() / nrow(db_new2))
+#Based on these data, the chance of Heart Attack/Disease for a Diabetic Non-smoker is 17.3% and for a Non-diabetic smoker it is 10.3%. For a diabetic smoker the chance of heart attack/disease is 26.9%. For Non-diabetic non-smokers it is the lowest at 4.8%
+```

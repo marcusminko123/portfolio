@@ -11,9 +11,9 @@
 
 
 
-<title>Portfolio 3</title>
+<title>portfolio piece 3 EDA_diabetes</title>
 
-<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
@@ -60,7 +60,6 @@ if (window.hljs) {
 
 
 
-
 <style type = "text/css">
 .main-container {
   max-width: 940px;
@@ -81,9 +80,6 @@ button.code-folding-btn:focus {
 }
 summary {
   display: list-item;
-}
-details > summary > p:only-child {
-  display: inline;
 }
 pre code {
   padding: 0;
@@ -236,7 +232,7 @@ $(document).ready(function () {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -293,18 +289,104 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Portfolio 3</h1>
+<h1 class="title toc-ignore">portfolio piece 3 EDA_diabetes</h1>
+<h4 class="date">3-15-2022</h4>
 
 </div>
 
 
-<blockquote>
-<p>The projects should be numbered consecutively (i.e., in the order in
-which you began them), and should include for each project a description
-of the goal, the product (computer program, hand graph, computer graph,
-etc.), the data, and some interpretation. Reports must be reproducible
-and of high quality in terms of writing, grammar, presentation, etc.</p>
-</blockquote>
+<p>#The goal is to explore health data and examine the influence of smoking and diabetes on heart attacks and heart disease #data: diabetes and health indicators</p>
+<pre class="r"><code>library(readr)
+diabetes_012_health_indicators_BRFSS2015 &lt;-    read_csv(&quot;~/Downloads/archive/diabetes_012_health_indicators_BRFSS2015.csv&quot;)</code></pre>
+<pre><code>## Rows: 253680 Columns: 22
+## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## dbl (22): Diabetes_012, HighBP, HighChol, CholCheck, BMI, Smoker, Stroke, He...
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre class="r"><code>#change name of dataset
+db &lt;- diabetes_012_health_indicators_BRFSS2015
+library(tidyverse)</code></pre>
+<pre><code>## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──
+## ✓ ggplot2 3.3.5     ✓ dplyr   1.0.8
+## ✓ tibble  3.1.6     ✓ stringr 1.4.0
+## ✓ tidyr   1.2.0     ✓ forcats 0.5.1
+## ✓ purrr   0.3.4     
+## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()</code></pre>
+<pre class="r"><code>#summarize data
+glimpse(db)</code></pre>
+<pre><code>## Rows: 253,680
+## Columns: 22
+## $ Diabetes_012         &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 2, 0, 0, 2, 0, 0, 0…
+## $ HighBP               &lt;dbl&gt; 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1, 0, 1, 1…
+## $ HighChol             &lt;dbl&gt; 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 0, 1, 0, 1, 1, 0, 1…
+## $ CholCheck            &lt;dbl&gt; 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
+## $ BMI                  &lt;dbl&gt; 40, 25, 28, 27, 24, 25, 30, 25, 30, 24, 25, 34, 2…
+## $ Smoker               &lt;dbl&gt; 1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 0…
+## $ Stroke               &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0…
+## $ HeartDiseaseorAttack &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0…
+## $ PhysActivity         &lt;dbl&gt; 0, 1, 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 1, 1, 1…
+## $ Fruits               &lt;dbl&gt; 0, 0, 1, 1, 1, 1, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 1…
+## $ Veggies              &lt;dbl&gt; 1, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1…
+## $ HvyAlcoholConsump    &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0…
+## $ AnyHealthcare        &lt;dbl&gt; 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
+## $ NoDocbcCost          &lt;dbl&gt; 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0…
+## $ GenHlth              &lt;dbl&gt; 5, 3, 5, 2, 2, 2, 3, 3, 5, 2, 3, 3, 3, 4, 4, 2, 3…
+## $ MentHlth             &lt;dbl&gt; 18, 0, 30, 0, 3, 0, 0, 0, 30, 0, 0, 0, 0, 0, 30, …
+## $ PhysHlth             &lt;dbl&gt; 15, 0, 30, 0, 0, 2, 14, 0, 30, 0, 0, 30, 15, 0, 2…
+## $ DiffWalk             &lt;dbl&gt; 1, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0…
+## $ Sex                  &lt;dbl&gt; 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0…
+## $ Age                  &lt;dbl&gt; 9, 7, 9, 11, 11, 10, 9, 11, 9, 8, 13, 10, 7, 11, …
+## $ Education            &lt;dbl&gt; 4, 6, 4, 3, 5, 6, 6, 4, 5, 4, 6, 5, 5, 4, 6, 6, 4…
+## $ Income               &lt;dbl&gt; 3, 1, 8, 6, 4, 8, 7, 4, 1, 3, 8, 1, 7, 6, 2, 8, 3…</code></pre>
+<pre class="r"><code>#plot the distribution of BMI scores
+db %&gt;% 
+       ggplot(aes(x = BMI)) + geom_histogram(fill = &quot;steel blue&quot;) +theme_linedraw() + labs(title = &quot;Distribution of BMI scores&quot;, y = &quot;frequency&quot;, x = &quot;BMI Scores&quot;)</code></pre>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="p03_files/figure-html/get%20data-1.png" width="672" /></p>
+<pre class="r"><code>#facet by sex
+db %&gt;% 
+ggplot(aes(x = BMI)) + geom_histogram(fill = &quot;steel blue&quot;) + theme_linedraw()+ facet_wrap(~Sex) + labs(title = &quot;Distribution of BMI scores&quot;, subtitle = &quot;0 = Men  1 = Women&quot;, y = &quot;frequency&quot;, x = &quot;BMI Scores&quot;)</code></pre>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="p03_files/figure-html/get%20data-2.png" width="672" /></p>
+<pre class="r"><code>#filter out the prediabetics, mutate, select
+db_new &lt;- db %&gt;% 
+                filter(Diabetes_012 != 1) %&gt;% 
+                mutate(Diabetes = recode(Diabetes_012, &quot;0&quot; = &quot;Normal&quot;, &quot;2&quot; = &quot;Diabetic&quot;)) 
+#Recode Smoking status and Heart Attack/Disease from numeric to descriptive characters
+db_new1 &lt;- db_new %&gt;% 
+         mutate(Smoking = recode(Smoker, &quot;0&quot; = &quot;Non-Smoker&quot;, &quot;1&quot; = &quot;Smoker&quot;)) 
+              
+                
+db_new2 &lt;- db_new1 %&gt;%
+      mutate(Heart_Attack_Disease = recode(HeartDiseaseorAttack, &quot;0&quot; = &quot;NO&quot;, &quot;1&quot; = &quot;YES&quot;))              
+                  
+#plot
+db_new2 %&gt;% 
+           ggplot(aes(x = Heart_Attack_Disease)) + geom_bar (fill = &quot;steel blue&quot;) + facet_grid(Diabetes ~ Smoking, scales = &quot;free&quot;) + theme_minimal() + labs(title = &quot;Heart Problems by Diabetes &amp; Smoking Status&quot;, y = &quot;Frequency&quot;, x = &quot;Heart Attack / Heart Disease&quot;)</code></pre>
+<p><img src="p03_files/figure-html/get%20data-3.png" width="672" /></p>
+<pre class="r"><code>#You can see in this plot that smoking if you&#39;re diabetic puts you at the greatest risk of a heart attack or diagnosis of heart disease
+db_new2 %&gt;% 
+          group_by(Diabetes, Smoking, Heart_Attack_Disease) %&gt;% 
+          summarise(percent = 100 * n() / nrow(db_new2))</code></pre>
+<pre><code>## `summarise()` has grouped output by &#39;Diabetes&#39;, &#39;Smoking&#39;. You can override
+## using the `.groups` argument.</code></pre>
+<pre><code>## # A tibble: 8 × 4
+## # Groups:   Diabetes, Smoking [4]
+##   Diabetes Smoking    Heart_Attack_Disease percent
+##   &lt;chr&gt;    &lt;chr&gt;      &lt;chr&gt;                  &lt;dbl&gt;
+## 1 Diabetic Non-Smoker NO                      5.65
+## 2 Diabetic Non-Smoker YES                     1.18
+## 3 Diabetic Smoker     NO                      5.38
+## 4 Diabetic Smoker     YES                     1.98
+## 5 Normal   Non-Smoker NO                     46.6 
+## 6 Normal   Non-Smoker YES                     2.37
+## 7 Normal   Smoker     NO                     33.1 
+## 8 Normal   Smoker     YES                     3.79</code></pre>
+<pre class="r"><code>#Based on these data, the chance of Heart Attack/Disease for a Diabetic Non-smoker is 17.3% and for a Non-diabetic smoker it is 10.3%. For a diabetic smoker the chance of heart attack/disease is 26.9%. For Non-diabetic non-smokers it is the lowest at 4.8%</code></pre>
 
 
 
