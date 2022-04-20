@@ -11,9 +11,9 @@
 
 
 
-<title>Portfolio 2</title>
+<title>Port_Piece_2</title>
 
-<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
@@ -60,7 +60,6 @@ if (window.hljs) {
 
 
 
-
 <style type = "text/css">
 .main-container {
   max-width: 940px;
@@ -81,9 +80,6 @@ button.code-folding-btn:focus {
 }
 summary {
   display: list-item;
-}
-details > summary > p:only-child {
-  display: inline;
 }
 pre code {
   padding: 0;
@@ -236,7 +232,7 @@ $(document).ready(function () {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -293,18 +289,122 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Portfolio 2</h1>
+<h1 class="title toc-ignore">Port_Piece_2</h1>
+<h4 class="date">02-25-2022</h4>
 
 </div>
 
 
-<blockquote>
-<p>The projects should be numbered consecutively (i.e., in the order in
-which you began them), and should include for each project a description
-of the goal, the product (computer program, hand graph, computer graph,
-etc.), the data, and some interpretation. Reports must be reproducible
-and of high quality in terms of writing, grammar, presentation, etc.</p>
-</blockquote>
+<p>#The goal is to plot stock prices for popular tech stock and examine volatility difference #<a href="data:yahoo" class="uri">data:yahoo</a> finance data</p>
+<pre class="r"><code>library(tidyquant)</code></pre>
+<pre><code>## Loading required package: lubridate</code></pre>
+<pre><code>## 
+## Attaching package: &#39;lubridate&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     date, intersect, setdiff, union</code></pre>
+<pre><code>## Loading required package: PerformanceAnalytics</code></pre>
+<pre><code>## Loading required package: xts</code></pre>
+<pre><code>## Loading required package: zoo</code></pre>
+<pre><code>## 
+## Attaching package: &#39;zoo&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     as.Date, as.Date.numeric</code></pre>
+<pre><code>## 
+## Attaching package: &#39;PerformanceAnalytics&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:graphics&#39;:
+## 
+##     legend</code></pre>
+<pre><code>## Loading required package: quantmod</code></pre>
+<pre><code>## Loading required package: TTR</code></pre>
+<pre><code>## Registered S3 method overwritten by &#39;quantmod&#39;:
+##   method            from
+##   as.zoo.data.frame zoo</code></pre>
+<pre><code>## ══ Need to Learn tidyquant? ════════════════════════════════════════════════════
+## Business Science offers a 1-hour course - Learning Lab #9: Performance Analysis &amp; Portfolio Optimization with tidyquant!
+## &lt;/&gt; Learn more at: https://university.business-science.io/p/learning-labs-pro &lt;/&gt;</code></pre>
+<pre class="r"><code>library(tidyverse)</code></pre>
+<pre><code>## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──</code></pre>
+<pre><code>## ✓ ggplot2 3.3.5     ✓ purrr   0.3.4
+## ✓ tibble  3.1.6     ✓ dplyr   1.0.8
+## ✓ tidyr   1.2.0     ✓ stringr 1.4.0
+## ✓ readr   2.1.2     ✓ forcats 0.5.1</code></pre>
+<pre><code>## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## x lubridate::as.difftime() masks base::as.difftime()
+## x lubridate::date()        masks base::date()
+## x dplyr::filter()          masks stats::filter()
+## x dplyr::first()           masks xts::first()
+## x lubridate::intersect()   masks base::intersect()
+## x dplyr::lag()             masks stats::lag()
+## x dplyr::last()            masks xts::last()
+## x lubridate::setdiff()     masks base::setdiff()
+## x lubridate::union()       masks base::union()</code></pre>
+<pre class="r"><code>#Define stocks for analysis and plot price movement
+tickers = c(&quot;AAPL&quot;, &quot;NFLX&quot;, &quot;AMZN&quot;, &quot;FB&quot;, &quot;TSLA&quot;, &quot;MSFT&quot;, &quot;GOOG&quot;)
+prices &lt;- tq_get(tickers,
+                                    from = &quot;2021-06-01&quot;,
+                                    to = &quot;2022-02-17&quot;,                                                                    get = &quot;stock.prices&quot;)</code></pre>
+<pre><code>## Registered S3 method overwritten by &#39;tune&#39;:
+##   method                   from   
+##   required_pkgs.model_spec parsnip</code></pre>
+<pre class="r"><code>prices %&gt;%
+          ggplot(aes(x = date, y = adjusted, color = symbol)) +
+          geom_line() +
+          theme_classic() +
+            scale_color_viridis_d() +
+                       labs(
+                          x = &#39;Date&#39;,
+                          y = &quot;Adjusted Price&quot;,
+                        title = &quot;Price Chart&quot;)</code></pre>
+<p><img src="p02_files/figure-html/packages-library-1.png" width="1056" /></p>
+<pre class="r"><code>#The above plot is not ideal as it is difficult to see price movement in the cheaper stocks
+#Faceting (below) will resolve this issue
+prices %&gt;%
+          ggplot(aes(x = date, y = adjusted, color = symbol)) +
+          geom_line() +
+          facet_wrap(~symbol, scales = &quot;free&quot;) +
+          theme_classic() +
+            scale_color_viridis_d() +
+                       labs(
+                          x = &#39;Date&#39;,
+                          y = &quot;Adjusted Price&quot;,
+                        title = &quot;Price Chart&quot;) </code></pre>
+<p><img src="p02_files/figure-html/packages-library-2.png" width="1056" /></p>
+<pre class="r"><code># Mutate to reduce the size of trading volume figures
+prices_2 &lt;- prices %&gt;% 
+       mutate(vol = volume/1000,
+              volatility = high - low)
+#plot trading volumes 
+prices_2 %&gt;% 
+   ggplot(aes(x = symbol, 
+              y = vol, 
+              fill = symbol)) + geom_boxplot() +
+                     labs(
+                          x = &quot;Ticker Symbol&quot;,
+                          y = &quot;# of Share Traded&quot;,
+                        title = &quot;Daily Trading Volume&quot;)</code></pre>
+<p><img src="p02_files/figure-html/packages-library-3.png" width="1056" /></p>
+<pre class="r"><code>#We see that Apple is a heavily traded stock, whereas Google is not
+   
+#Next, lets see which stocks are the most volatile
+#Need to z-score volatility by group (ticker symbol)
+prices_z &lt;- prices_2 %&gt;% 
+  group_by(symbol) %&gt;% 
+  mutate(z_volatile = (volatility - mean(volatility)) / sd(volatility))
+         
+#Now we can plot with standardization
+prices_z %&gt;% 
+   ggplot(aes(
+              x = symbol, 
+              y = z_volatile, 
+              fill = symbol)) + geom_boxplot() +
+                     labs(
+                          x = &quot;Ticker Symbol&quot;,
+                          y = &quot;Volatility&quot;,
+                        title = &quot;Intraday Price Fluctuation&quot;)</code></pre>
+<p><img src="p02_files/figure-html/packages-library-4.png" width="1056" /></p>
+<pre class="r"><code>#These stocks are roughly equal in volatility</code></pre>
 
 
 
