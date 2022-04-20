@@ -1,5 +1,29 @@
 ---
-title: "Portfolio 9"
+title: "gene data viz"
+author: "Marcus Minko"
+date: "4/19/2022"
+output: html_document
 ---
+#The goal is to look at the distribution of tissue types with gene mutations
+#data: gene mutations
 
-> The projects should be numbered consecutively (i.e., in the order in which you began them), and should include for each project a description of the goal, the product (computer program, hand graph, computer graph, etc.), the data, and some interpretation. Reports must be reproducible and of high quality in terms of writing, grammar, presentation, etc.
+```{r data-packages}
+library(tidyverse)
+library(readr)
+gene <- read_csv("gene.csv")
+glimpse(gene)
+summary(gene)
+#Plot of the frequency of tissue types
+gene %>% 
+  ggplot(aes(x = Tissue, fill = Tissue)) + geom_bar() + labs(title = "Gene Mutations by Tissue Type", x = "Tissue", y = "Frequency")
+#Comparison of these distributions faceted by evidence type
+ gene %>% 
+          ggplot(aes(x = Tissue, fill = Tissue)) + 
+          geom_bar() + 
+          facet_wrap(~GDR, scales = "free_y") +
+          theme(axis.text.x=element_blank()) +
+          labs(title = "Gene Mutations by Tissue Type by Strength of Evidence", 
+               y = "Frequency")
+ 
+ #This reveal some interesting differences. In the definitive evidence category, there are very few blood-related genes but disproportionately significant amount of lung-related genes. This is inversely reflected in the "no evidence" category.
+```

@@ -9,11 +9,12 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
+<meta name="author" content="Marcus Minko" />
 
 
-<title>Portfolio 9</title>
+<title>gene data viz</title>
 
-<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
@@ -60,7 +61,6 @@ if (window.hljs) {
 
 
 
-
 <style type = "text/css">
 .main-container {
   max-width: 940px;
@@ -81,9 +81,6 @@ button.code-folding-btn:focus {
 }
 summary {
   display: list-item;
-}
-details > summary > p:only-child {
-  display: inline;
 }
 pre code {
   padding: 0;
@@ -236,7 +233,7 @@ $(document).ready(function () {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -293,18 +290,83 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Portfolio 9</h1>
+<h1 class="title toc-ignore">gene data viz</h1>
+<h4 class="author">Marcus Minko</h4>
+<h4 class="date">4/19/2022</h4>
 
 </div>
 
 
-<blockquote>
-<p>The projects should be numbered consecutively (i.e., in the order in
-which you began them), and should include for each project a description
-of the goal, the product (computer program, hand graph, computer graph,
-etc.), the data, and some interpretation. Reports must be reproducible
-and of high quality in terms of writing, grammar, presentation, etc.</p>
-</blockquote>
+<p>#The goal is to look at the distribution of tissue types with gene mutations #data: gene mutations</p>
+<pre class="r"><code>library(tidyverse)</code></pre>
+<pre><code>## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──</code></pre>
+<pre><code>## ✓ ggplot2 3.3.5     ✓ purrr   0.3.4
+## ✓ tibble  3.1.6     ✓ dplyr   1.0.8
+## ✓ tidyr   1.2.0     ✓ stringr 1.4.0
+## ✓ readr   2.1.2     ✓ forcats 0.5.1</code></pre>
+<pre><code>## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()</code></pre>
+<pre class="r"><code>library(readr)
+gene &lt;- read_csv(&quot;gene.csv&quot;)</code></pre>
+<pre><code>## Rows: 5000 Columns: 11</code></pre>
+<pre><code>## ── Column specification ────────────────────────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr (4): Gene, Pathway, Tissue, GDR
+## dbl (7): Mutation, D1, D2, D3, D4, D5, D6
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre class="r"><code>glimpse(gene)</code></pre>
+<pre><code>## Rows: 5,000
+## Columns: 11
+## $ Gene     &lt;chr&gt; &quot;G1894&quot;, &quot;G19755&quot;, &quot;G53579&quot;, &quot;G34857&quot;, &quot;G34526&quot;, &quot;G7888&quot;, &quot;G5…
+## $ Pathway  &lt;chr&gt; &quot;Pathway2&quot;, &quot;Pathway4&quot;, &quot;Pathway2&quot;, &quot;Pathway4&quot;, &quot;Pathway4&quot;, &quot;…
+## $ Tissue   &lt;chr&gt; &quot;Brain&quot;, &quot;Liver&quot;, &quot;Brain&quot;, &quot;Kidney&quot;, &quot;Blood&quot;, &quot;Skin&quot;, &quot;Skin&quot;,…
+## $ GDR      &lt;chr&gt; &quot;Moderate&quot;, &quot;Noevidence&quot;, &quot;Definitive&quot;, &quot;Noevidence&quot;, &quot;Noevid…
+## $ Mutation &lt;dbl&gt; 3077, 8321, 2697, 878, 868, 4311, 2342, 8246, 731, 1229, 935,…
+## $ D1       &lt;dbl&gt; 0.79, 1.20, 0.70, 0.30, 0.33, 1.00, 0.70, 1.00, 0.30, 0.53, 0…
+## $ D2       &lt;dbl&gt; 5.97, 6.85, 5.61, 4.32, 4.42, 6.38, 5.65, 6.34, 4.28, 5.23, 4…
+## $ D3       &lt;dbl&gt; 3.61, 4.11, 3.60, 2.69, 2.70, 3.89, 3.48, 3.98, 2.72, 3.21, 3…
+## $ D4       &lt;dbl&gt; 5.99, 6.88, 5.57, 4.26, 4.46, 6.44, 5.61, 6.44, 4.26, 5.26, 5…
+## $ D5       &lt;dbl&gt; 60.4, 59.9, 64.4, 62.7, 60.8, 60.7, 61.8, 62.3, 63.7, 61.2, 6…
+## $ D6       &lt;dbl&gt; 59, 61, 53, 57, 56, 59, 60, 55, 56, 55, 55, 55, 59, 59, 56, 5…</code></pre>
+<pre class="r"><code>summary(gene)</code></pre>
+<pre><code>##      Gene             Pathway             Tissue              GDR           
+##  Length:5000        Length:5000        Length:5000        Length:5000       
+##  Class :character   Class :character   Class :character   Class :character  
+##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+##                                                                             
+##                                                                             
+##                                                                             
+##     Mutation           D1               D2               D3       
+##  Min.   :  345   Min.   :0.2000   Min.   : 3.730   Min.   :1.070  
+##  1st Qu.:  945   1st Qu.:0.4000   1st Qu.: 4.710   1st Qu.:2.910  
+##  Median : 2402   Median :0.7000   Median : 5.690   Median :3.520  
+##  Mean   : 3902   Mean   :0.7927   Mean   : 5.718   Mean   :3.532  
+##  3rd Qu.: 5158   3rd Qu.:1.0400   3rd Qu.: 6.530   3rd Qu.:4.030  
+##  Max.   :18823   Max.   :4.0100   Max.   :10.140   Max.   :6.170  
+##        D4               D5              D6      
+##  Min.   : 3.680   Min.   :53.20   Min.   :44.0  
+##  1st Qu.: 4.720   1st Qu.:61.10   1st Qu.:56.0  
+##  Median : 5.700   Median :61.90   Median :57.0  
+##  Mean   : 5.719   Mean   :61.78   Mean   :57.4  
+##  3rd Qu.: 6.530   3rd Qu.:62.50   3rd Qu.:59.0  
+##  Max.   :10.100   Max.   :69.30   Max.   :79.0</code></pre>
+<pre class="r"><code>#Plot of the frequency of tissue types
+gene %&gt;% 
+  ggplot(aes(x = Tissue, fill = Tissue)) + geom_bar() + labs(title = &quot;Gene Mutations by Tissue Type&quot;, x = &quot;Tissue&quot;, y = &quot;Frequency&quot;)</code></pre>
+<p><img src="p09_files/figure-html/data-packages-1.png" width="672" /></p>
+<pre class="r"><code>#Comparison of these distributions faceted by evidence type
+ gene %&gt;% 
+          ggplot(aes(x = Tissue, fill = Tissue)) + 
+          geom_bar() + 
+          facet_wrap(~GDR, scales = &quot;free_y&quot;) +
+          theme(axis.text.x=element_blank()) +
+          labs(title = &quot;Gene Mutations by Tissue Type by Strength of Evidence&quot;, 
+               y = &quot;Frequency&quot;)</code></pre>
+<p><img src="p09_files/figure-html/data-packages-2.png" width="672" /></p>
+<pre class="r"><code> #This reveal some interesting differences. In the definitive evidence category, there are very few blood-related genes but disproportionately significant amount of lung-related genes. This is inversely reflected in the &quot;no evidence&quot; category.</code></pre>
 
 
 
