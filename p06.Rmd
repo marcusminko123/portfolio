@@ -9,7 +9,7 @@ output: github_document
 
 ### Load packages and data
 
-```{r load-packages, message=FALSE}
+```{r load-packages}
 library(tidyverse) 
 library(tidymodels)
 library(openintro)

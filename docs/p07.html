@@ -9,11 +9,12 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
+<meta name="author" content="Marcus Minko" />
 
 
-<title>Portfolio 7</title>
+<title>Chicago Crime</title>
 
-<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
@@ -60,7 +61,6 @@ if (window.hljs) {
 
 
 
-
 <style type = "text/css">
 .main-container {
   max-width: 940px;
@@ -81,9 +81,6 @@ button.code-folding-btn:focus {
 }
 summary {
   display: list-item;
-}
-details > summary > p:only-child {
-  display: inline;
 }
 pre code {
   padding: 0;
@@ -236,7 +233,7 @@ $(document).ready(function () {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -293,18 +290,38 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Portfolio 7</h1>
+<h1 class="title toc-ignore">Chicago Crime</h1>
+<h4 class="author">Marcus Minko</h4>
+<h4 class="date">4/13/2022</h4>
 
 </div>
 
 
-<blockquote>
-<p>The projects should be numbered consecutively (i.e., in the order in
-which you began them), and should include for each project a description
-of the goal, the product (computer program, hand graph, computer graph,
-etc.), the data, and some interpretation. Reports must be reproducible
-and of high quality in terms of writing, grammar, presentation, etc.</p>
-</blockquote>
+<p>#The goal is to find the most common crime and plot the descriptions #<a href="data:reports" class="uri">data:reports</a> of crimes in Chicago</p>
+<div id="load-packages-and-data" class="section level3">
+<h3>Load packages and data</h3>
+<pre class="r"><code>library(tidyverse)
+Chicago_Crime_Data &lt;- read_csv(&quot;Chicago_Crime_Data.csv&quot;)
+ChiCrime &lt;- Chicago_Crime_Data
+View(ChiCrime)</code></pre>
+</div>
+<div id="find-the-most-common-types-top-10-of-crime-in-chicago-and-plot-them" class="section level3">
+<h3>Find the most common types (top 10) of crime in Chicago and plot them</h3>
+<pre class="{crime-type}"><code>ChiCrime %&gt;% 
+  drop_na %&gt;%
+  group_by(PRIMARY_TYPE) %&gt;%
+  summarize(
+    count = n(),
+    percent = count / nrow(.) * 100
+  ) %&gt;%
+  arrange(desc(count), desc(PRIMARY_TYPE)) %&gt;%
+  head(10)</code></pre>
+<p>#Theft is most common crime. Next, a frequency plot of these theft descriptions</p>
+<pre class="r"><code>ChiCrime %&gt;% 
+ filter(PRIMARY_TYPE == &quot;THEFT&quot;) %&gt;% 
+ ggplot(aes(x = DESCRIPTION)) + geom_bar(fill = &quot;Steel Blue&quot;) + theme(axis.text.x = element_text(angle = 45, hjust = 1)) + labs(title = &quot;Frequency of Types of Theft in Chicago&quot;, y = &quot;Frequency&quot;)</code></pre>
+<p><img src="p07_files/figure-html/description-plot-1.png" width="672" /></p>
+</div>
 
 
 
