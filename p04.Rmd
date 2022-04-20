@@ -1,5 +1,44 @@
 ---
-title: "Portfolio 4"
+title: "cars portfolio piece 4"
+author: "Marcus Minko"
+date: "3/21/2022"
+output: html_document
 ---
 
-> The projects should be numbered consecutively (i.e., in the order in which you began them), and should include for each project a description of the goal, the product (computer program, hand graph, computer graph, etc.), the data, and some interpretation. Reports must be reproducible and of high quality in terms of writing, grammar, presentation, etc.
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#The goal is to examine and plot the relationship between speed and stopping distance
+#data: speed and stopping distances of cars
+
+```{r cars}
+library(tidyverse)
+summary(cars)
+#plot
+cars %>% 
+  ggplot(aes(x = speed, y = dist)) + geom_point()
+#Correlate
+cars %>% 
+summarize(r = cor(speed, dist))
+#Linear Regression and Plot
+lm_speed_dist <- lm(formula = dist ~ speed, data = cars)
+summary(lm_speed_dist)
+#distance = -17.58 + (3.93)(speed)
+cars %>% 
+  ggplot(aes(x = speed, y = dist)) + geom_point() + geom_smooth(method = "lm", se = FALSE)
+#LM plot with standard error lines
+cars %>% 
+  ggplot(aes(x = speed, y = dist)) + geom_point() + geom_smooth(method = "lm")
+#mutate distance/speed
+cars <- cars %>% 
+  mutate(dist_speed = dist / speed)
+glimpse(cars)
+#mutate new column identifed cars that had a distance 3x or greater than speed
+cars <- cars %>% 
+ mutate(efficient = if_else(dist_speed >= 3 , "YES", "NO") )
+#plot just the hyper efficient cars
+cars %>% 
+  filter(efficient == "YES") %>% 
+  ggplot(aes(x = speed, y = dist)) + geom_point() + geom_smooth(method = "lm", se = FALSE)
+```
