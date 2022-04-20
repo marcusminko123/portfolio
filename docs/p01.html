@@ -9,11 +9,12 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
+<meta name="author" content="Marcus Minko" />
 
 
-<title>Portfolio 1</title>
+<title>portfolio-piece-1</title>
 
-<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
@@ -60,7 +61,6 @@ if (window.hljs) {
 
 
 
-
 <style type = "text/css">
 .main-container {
   max-width: 940px;
@@ -81,9 +81,6 @@ button.code-folding-btn:focus {
 }
 summary {
   display: list-item;
-}
-details > summary > p:only-child {
-  display: inline;
 }
 pre code {
   padding: 0;
@@ -236,7 +233,7 @@ $(document).ready(function () {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -293,20 +290,161 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Portfolio 1</h1>
+<h1 class="title toc-ignore">portfolio-piece-1</h1>
+<h4 class="author">Marcus Minko</h4>
+<h4 class="date">1/28/2022</h4>
 
 </div>
 
 
-<blockquote>
-<p>The projects should be numbered consecutively (i.e., in the order in
-which you began them), and should include for each project a description
-of the goal, the product (computer program, hand graph, computer graph,
-etc.), the data, and some interpretation. Reports must be reproducible
-and of high quality in terms of writing, grammar, presentation, etc.</p>
-</blockquote>
-<pre class="r"><code>library(tidyverse) 
-library(datasauRus)</code></pre>
+<p>#The goal for this project is too plot and analyze correlations between types of crime and other variables #data: United States Crime Data</p>
+<div id="load-packages-and-data" class="section level3">
+<h3>Load packages and data</h3>
+<pre class="r"><code>library(tidyverse) </code></pre>
+</div>
+<div id="looking-at-the-dataset-usarrests" class="section level3">
+<h3>Looking at the dataset USArrests</h3>
+<pre class="r"><code>glimpse(USArrests)</code></pre>
+<pre><code>## Rows: 50
+## Columns: 4
+## $ Murder   &lt;dbl&gt; 13.2, 10.0, 8.1, 8.8, 9.0, 7.9, 3.3, 5.9, 15.4, 17.4, 5.3, 2.…
+## $ Assault  &lt;int&gt; 236, 263, 294, 190, 276, 204, 110, 238, 335, 211, 46, 120, 24…
+## $ UrbanPop &lt;int&gt; 58, 48, 80, 50, 91, 78, 77, 72, 80, 60, 83, 54, 83, 65, 57, 6…
+## $ Rape     &lt;dbl&gt; 21.2, 44.5, 31.0, 19.5, 40.6, 38.7, 11.1, 15.8, 31.9, 25.8, 2…</code></pre>
+</div>
+<div id="descriptive-statistics" class="section level3">
+<h3>Descriptive Statistics</h3>
+<pre class="r"><code>summary(USArrests)</code></pre>
+<pre><code>##      Murder          Assault         UrbanPop          Rape      
+##  Min.   : 0.800   Min.   : 45.0   Min.   :32.00   Min.   : 7.30  
+##  1st Qu.: 4.075   1st Qu.:109.0   1st Qu.:54.50   1st Qu.:15.07  
+##  Median : 7.250   Median :159.0   Median :66.00   Median :20.10  
+##  Mean   : 7.788   Mean   :170.8   Mean   :65.54   Mean   :21.23  
+##  3rd Qu.:11.250   3rd Qu.:249.0   3rd Qu.:77.75   3rd Qu.:26.18  
+##  Max.   :17.400   Max.   :337.0   Max.   :91.00   Max.   :46.00</code></pre>
+</div>
+<div id="creating-new-variable-total-violent-crime" class="section level3">
+<h3>Creating new variable: total violent crime</h3>
+<pre class="r"><code>USArrests &lt;- USArrests %&gt;% 
+    mutate(USArrests, 
+           violent_crime_total = Murder + Assault + Rape
+           )</code></pre>
+</div>
+<div id="top-10-least-violent-states" class="section level3">
+<h3>Top 10 least violent states</h3>
+<pre class="r"><code>USArrests %&gt;% 
+    select(violent_crime_total) %&gt;% 
+    arrange(violent_crime_total) %&gt;% 
+    head(10)</code></pre>
+<pre><code>##               violent_crime_total
+## North Dakota                 53.1
+## Vermont                      61.4
+## Wisconsin                    66.4
+## New Hampshire                68.6
+## Iowa                         69.5
+## Hawaii                       71.5
+## Minnesota                    89.6
+## Maine                        92.9
+## West Virginia                96.0
+## South Dakota                102.6</code></pre>
+</div>
+<div id="top-10-most-violent-states" class="section level3">
+<h3>Top 10 most violent states</h3>
+<pre class="r"><code>USArrests %&gt;% 
+   select(violent_crime_total) %&gt;% 
+   arrange(desc(violent_crime_total)) %&gt;% 
+   head(10)</code></pre>
+<pre><code>##                violent_crime_total
+## Florida                      382.3
+## North Carolina               366.1
+## Maryland                     339.1
+## Arizona                      333.1
+## New Mexico                   328.5
+## California                   325.6
+## Alaska                       317.5
+## South Carolina               315.9
+## Nevada                       310.2
+## Michigan                     302.2</code></pre>
+</div>
+<div id="whats-the-relationship-between-violent-crime-and-percentage-of-urban-population" class="section level3">
+<h3>What’s the relationship between violent crime and percentage of urban population</h3>
+<pre class="r"><code>ggplot(data = USArrests) +
+     geom_point(
+       mapping = aes(
+                     x = violent_crime_total, 
+                     y = UrbanPop
+                     )) +
+     labs(
+          title = &quot;Total Violent Crime by Percentage Urban Population&quot;, 
+            x = &quot;Total Violent Crime&quot;, 
+            y = &quot;Percentage Urban Population&quot;
+            )</code></pre>
+<p><img src="p01_files/figure-html/plot-violent-crime-urban-population-1.png" width="672" /></p>
+<pre class="r"><code># Correlation between Total Crime and Urban Population
+USArrests %&gt;% 
+     summarize(r = cor(violent_crime_total, UrbanPop))</code></pre>
+<pre><code>##           r
+## 1 0.2755569</code></pre>
+<p>A correlation of .28 suggests that total crime and percentage of Urban Population are somewhat related.</p>
+</div>
+<div id="relationship-of-percentage-urban-population-to-each-specific-criminal-act" class="section level3">
+<h3>Relationship of percentage urban population to each specific criminal act</h3>
+<pre class="r"><code>ggplot(data = USArrests) +
+     geom_point(
+         mapping = aes(
+             x = Murder, 
+             y = UrbanPop
+         )) +
+     labs(
+         title = &quot;Murders by Percentage Urban Population&quot;, 
+         x = &quot;Murders (per 100,000)&quot;, 
+         y = &quot;Percentage Urban Population&quot;
+     )</code></pre>
+<p><img src="p01_files/figure-html/crime-by-urban-population-1.png" width="672" /></p>
+<pre class="r"><code># correlation between murders and percentage urban population
+USArrests %&gt;% 
+     summarize(r = cor(Murder, UrbanPop))</code></pre>
+<pre><code>##            r
+## 1 0.06957262</code></pre>
+<pre class="r"><code># A correlation of only .07 suggests that murder is not related to percentage of urban population
+ggplot(data = USArrests) +
+     geom_point(
+         mapping = aes(
+             x = Assault, 
+             y = UrbanPop
+         )) +
+     labs(
+         title = &quot;Assaults by Percentage Urban Population&quot;, 
+         x = &quot;Assaults (per 100,000)&quot;, 
+         y = &quot;Percentage Urban Population&quot;
+     )</code></pre>
+<p><img src="p01_files/figure-html/crime-by-urban-population-2.png" width="672" /></p>
+<pre class="r"><code># Correlation between assaults and percentage urban population
+USArrests %&gt;% 
+     summarize(r = cor(Assault, UrbanPop))</code></pre>
+<pre><code>##           r
+## 1 0.2588717</code></pre>
+<pre class="r"><code># A correlation of .26 suggest that there is somewhat of an association between urban population and assaults
+ggplot(data = USArrests) +
+     geom_point(
+         mapping = aes(
+             x = Rape, 
+             y = UrbanPop
+         )) +
+     labs(
+         title = &quot;Rape Cases by Percentage Urban Population&quot;, 
+         x = &quot;Rape Cases (per 100,000)&quot;, 
+         y = &quot;Percentage Urban Population&quot;
+     )</code></pre>
+<p><img src="p01_files/figure-html/crime-by-urban-population-3.png" width="672" /></p>
+<pre class="r"><code># Correlation between assaults and percentage urban population
+USArrests %&gt;% 
+     summarize(r = cor(Rape, UrbanPop))</code></pre>
+<pre><code>##           r
+## 1 0.4113412</code></pre>
+<pre class="r"><code># A correlation of .41 suggest that there is pretty good evidence that Rape is positively correlated with the percentage of urban population in a state</code></pre>
+<p>In Summary, higher murder rates does not appear to be related to a greater percentage of a states population being urban, whereas rape seems to be pretty strongly related to urban population percentage in a positive direction.</p>
+</div>
 
 
 

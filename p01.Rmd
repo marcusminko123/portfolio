@@ -1,11 +1,123 @@
 ---
-title: "Portfolio 1"
+title: "portfolio-piece-1"
+author: "Marcus Minko"
+date: "1/28/2022"
+output: html_document
 ---
+#The goal for this project is too plot and analyze correlations between types of crime and other variables
+#data: United States Crime Data
 
-> The projects should be numbered consecutively (i.e., in the order in which you began them), and should include for each project a description of the goal, the product (computer program, hand graph, computer graph, etc.), the data, and some interpretation. Reports must be reproducible and of high quality in terms of writing, grammar, presentation, etc.
+### Load packages and data
 
 ```{r load-packages, message=FALSE}
 library(tidyverse) 
-library(datasauRus)
 ```
 
+### Looking at the dataset USArrests
+```{r data-glimpse}
+glimpse(USArrests)
+```
+
+### Descriptive Statistics
+``` {r data-summary}
+summary(USArrests)
+```
+
+### Creating new variable: total violent crime
+``` {r mutate-total-violent-crime}
+USArrests <- USArrests %>% 
+    mutate(USArrests, 
+           violent_crime_total = Murder + Assault + Rape
+           )
+```
+
+### Top 10 least violent states
+
+```{r least-violent}
+USArrests %>% 
+    select(violent_crime_total) %>% 
+    arrange(violent_crime_total) %>% 
+    head(10)
+```
+
+### Top 10 most violent states
+
+```{r most-violent}
+USArrests %>% 
+   select(violent_crime_total) %>% 
+   arrange(desc(violent_crime_total)) %>% 
+   head(10)
+```
+
+### What's the relationship between violent crime and percentage of urban population
+
+```{r plot-violent-crime-urban-population}
+ggplot(data = USArrests) +
+     geom_point(
+       mapping = aes(
+                     x = violent_crime_total, 
+                     y = UrbanPop
+                     )) +
+     labs(
+          title = "Total Violent Crime by Percentage Urban Population", 
+            x = "Total Violent Crime", 
+            y = "Percentage Urban Population"
+            )
+# Correlation between Total Crime and Urban Population
+USArrests %>% 
+     summarize(r = cor(violent_crime_total, UrbanPop))
+```
+
+A correlation of .28 suggests that total crime and percentage of Urban Population are somewhat related.
+
+### Relationship of percentage urban population to each specific criminal act
+
+```{r crime-by-urban-population}
+ggplot(data = USArrests) +
+     geom_point(
+         mapping = aes(
+             x = Murder, 
+             y = UrbanPop
+         )) +
+     labs(
+         title = "Murders by Percentage Urban Population", 
+         x = "Murders (per 100,000)", 
+         y = "Percentage Urban Population"
+     )
+# correlation between murders and percentage urban population
+USArrests %>% 
+     summarize(r = cor(Murder, UrbanPop))
+# A correlation of only .07 suggests that murder is not related to percentage of urban population
+ggplot(data = USArrests) +
+     geom_point(
+         mapping = aes(
+             x = Assault, 
+             y = UrbanPop
+         )) +
+     labs(
+         title = "Assaults by Percentage Urban Population", 
+         x = "Assaults (per 100,000)", 
+         y = "Percentage Urban Population"
+     )
+# Correlation between assaults and percentage urban population
+USArrests %>% 
+     summarize(r = cor(Assault, UrbanPop))
+# A correlation of .26 suggest that there is somewhat of an association between urban population and assaults
+ggplot(data = USArrests) +
+     geom_point(
+         mapping = aes(
+             x = Rape, 
+             y = UrbanPop
+         )) +
+     labs(
+         title = "Rape Cases by Percentage Urban Population", 
+         x = "Rape Cases (per 100,000)", 
+         y = "Percentage Urban Population"
+     )
+# Correlation between assaults and percentage urban population
+USArrests %>% 
+     summarize(r = cor(Rape, UrbanPop))
+# A correlation of .41 suggest that there is pretty good evidence that Rape is positively correlated with the percentage of urban population in a state
+```
+
+In Summary, higher murder rates does not appear to be related to a greater percentage of a states population being urban, whereas rape seems to be pretty strongly related to urban population percentage in a positive direction.
