@@ -4,7 +4,7 @@ author: "Marcus Minko"
 date: "1/28/2022"
 output: html_document
 ---
-#The goal for this project is too plot and analyze correlations between types of crime and other variables
+#The goal for this project is to plot and analyze correlations between types of crime and other variables
 #data: United States Crime Data
 
 ### Load packages and data
